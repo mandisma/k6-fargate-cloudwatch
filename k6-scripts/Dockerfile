@@ -1,5 +1,5 @@
 FROM loadimpact/k6:latest
-ENV SCRIPT sample.js
+ENV SCRIPT smoke.js
 COPY ./test /test
 WORKDIR /test
 # Override the entry point of the base k6 image
