@@ -75,20 +75,6 @@ Run a new task using the ECS Task Definition.
 ## Monitoring
 This sample also include a CloudWatch Dashboard to simply monitoring the metrics for the load test.
 
-
-### Create CloudWatch Dashboard
-Replace all the region code in the CloudWatch dashboard template "cloudwatch-metrics-dashboard/dashboard.json".
-
-![Replace Region](img/replace_region.png?raw=true "Replace Region")
-
-Create a new CloudWatch Dashboard in the AWS Console. 
-
-Then open the dashboard, select "Action -> View/edit source" paste the template.
-
-![Edit CloudWatch Dashboard](img/edit_dashboard.png?raw=true "Edit CloudWatch Dashboard")
-
-After creating the dashboard, you can monitor the load tests with CloudWatch dashboard.
-
 ![CloudWatch Dashboard](img/cloudwatch_dashboard.png?raw=true "CloudWatch Dashboard")
 
 ## References

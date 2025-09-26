@@ -12,7 +12,7 @@ resource "aws_vpc" "this" {
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-  tags = { Name = "k6-igw" }
+  tags   = { Name = "k6-igw" }
 }
 
 resource "aws_subnet" "public_a" {
@@ -20,7 +20,7 @@ resource "aws_subnet" "public_a" {
   cidr_block              = cidrsubnet(var.vpc_cidr, 4, 0)
   availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
-  tags = { Name = "k6-public-a" }
+  tags                    = { Name = "k6-public-a" }
 }
 
 resource "aws_subnet" "public_b" {
@@ -28,7 +28,7 @@ resource "aws_subnet" "public_b" {
   cidr_block              = cidrsubnet(var.vpc_cidr, 4, 1)
   availability_zone       = length(data.aws_availability_zones.available.names) > 1 ? data.aws_availability_zones.available.names[1] : data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
-  tags = { Name = "k6-public-b" }
+  tags                    = { Name = "k6-public-b" }
 }
 
 resource "aws_route_table" "public" {
@@ -205,4 +205,9 @@ resource "aws_ecs_task_definition" "k6" {
       }
     }
   ])
+}
+
+resource "aws_cloudwatch_dashboard" "k6" {
+  dashboard_name = "k6"
+  dashboard_body = templatefile("${path.module}/cloudwatch-metrics-dashboard/dashboard.json.tftpl", { region = var.region })
 }
