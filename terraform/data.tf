@@ -1,4 +1,4 @@
-data "aws_availability_zones" "available" {}
+# data "aws_availability_zones" "available" {}
 
 data "aws_iam_policy_document" "ecs_tasks_assume" {
   statement {

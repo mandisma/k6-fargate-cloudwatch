@@ -1,3 +1,31 @@
+terraform {
+  required_version = ">= 1.5.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.region
+
+  default_tags {
+    tags = {
+      "${local.company_name}:project"     = local.project
+      "${local.company_name}:environment" = local.environment
+      "${local.company_name}:managedBy"   = "terraform"
+    }
+  }
+}
+
+locals {
+  project      = var.project
+  environment  = var.environment
+  company_name = var.company_name
+}
+
 #-----------------------------
 # Networking
 #-----------------------------
@@ -53,7 +81,7 @@
 # }
 
 resource "aws_security_group" "task" {
-  name        = "k6-fargate-sg"
+  name        = "${local.project}-fargate-sg"
   description = "Security group for k6 Fargate tasks"
   # vpc_id      = aws_vpc.this.id
   vpc_id = var.vpc_id
@@ -66,14 +94,14 @@ resource "aws_security_group" "task" {
     description = "Egress to all HTTPs"
   }
 
-  tags = { Name = "k6-fargate-sg" }
+  tags = { Name = "${local.project}-fargate-sg" }
 }
 
 #-----------------------------
 # ECR
 #-----------------------------
 resource "aws_ecr_repository" "k6" {
-  name                 = "custom-k6"
+  name                 = "custom-${local.project}"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
@@ -81,14 +109,14 @@ resource "aws_ecr_repository" "k6" {
     scan_on_push = true
   }
 
-  tags = { Name = "custom-k6" }
+  tags = { Name = "custom-${local.project}" }
 }
 
 #-----------------------------
 # ECS Cluster
 #-----------------------------
 resource "aws_ecs_cluster" "this" {
-  name = "K6Cluster"
+  name = "${local.project}-cluster"
 
   setting {
     name  = "containerInsights"
@@ -100,7 +128,7 @@ resource "aws_ecs_cluster" "this" {
 # IAM Roles
 #-----------------------------
 resource "aws_iam_role" "execution" {
-  name               = "ecsTaskExecutionRole-k6"
+  name               = "ecsTaskExecutionRole-${local.project}"
   assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume.json
 }
 
@@ -120,7 +148,7 @@ resource "aws_iam_role_policy_attachment" "execution_ecs" {
 }
 
 resource "aws_iam_role" "task" {
-  name               = "ecsTaskRole-k6"
+  name               = "ecsTaskRole-${local.project}"
   assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume.json
 }
 
@@ -168,7 +196,7 @@ locals {
 }
 
 resource "aws_ecs_task_definition" "k6" {
-  family                   = "K6Task"
+  family                   = local.project
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "4096"
@@ -178,7 +206,7 @@ resource "aws_ecs_task_definition" "k6" {
 
   container_definitions = jsonencode([
     {
-      name      = "k6"
+      name      = local.project
       image     = local.k6_image
       essential = true
       ulimits = [{
@@ -216,6 +244,6 @@ resource "aws_ecs_task_definition" "k6" {
 }
 
 resource "aws_cloudwatch_dashboard" "k6" {
-  dashboard_name = "k6"
-  dashboard_body = templatefile("${path.module}/cloudwatch-metrics-dashboard/dashboard.json.tftpl", { region = var.region })
+  dashboard_name = local.project
+  dashboard_body = templatefile("${path.module}/cloudwatch-metrics-dashboard/dashboard2.json.tftpl", { region = var.region })
 }

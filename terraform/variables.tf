@@ -5,8 +5,23 @@ variable "region" {
 }
 
 variable "vpc_id" {
-  type = string
+  type        = string
   description = "The VPC ID"
+}
+
+variable "project" {
+  type        = string
+  description = "Project name"
+}
+
+variable "environment" {
+  type        = string
+  description = "Environment name"
+}
+
+variable "company_name" {
+  type        = string
+  description = "Company name"
 }
 
 # variable "create_vpc" {
