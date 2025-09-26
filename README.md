@@ -21,13 +21,13 @@ terraform apply
 ```
 - Note the output ecr_repository_url.
 - Build and push the k6 image located in k6-scripts/ to the ECR repository created by Terraform:
-```
-AWS_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+```shell
+AWS_REGION=${AWS_DEFAULT_REGION:-eu-west-1}
 ECR_URL=$(terraform output -raw ecr_repository_url)
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URL
 cd ../k6-scripts
-docker build -t $ECR_URL:latest .
-docker push $ECR_URL:latest
+docker build --platform "linux/amd64" -t "$ECR_URL":latest .
+docker push "$ECR_URL":latest
 ```
 
 ## Deploy 

@@ -74,7 +74,7 @@ resource "aws_security_group" "task" {
 #-----------------------------
 resource "aws_ecr_repository" "k6" {
   name                 = "custom-k6"
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
   force_delete         = true
 
   image_scanning_configuration {
@@ -91,7 +91,7 @@ resource "aws_ecs_cluster" "this" {
   name = "K6Cluster"
 
   setting {
-    name  = "ContainerInsights"
+    name  = "containerInsights"
     value = "enabled"
   }
 }
@@ -145,7 +145,8 @@ resource "aws_ssm_parameter" "cwagent_config" {
                 "metrics_collection_interval": 1,
                 "metrics_aggregation_interval": 0
             }
-        }
+        },
+        "force_flush_interval": 15
     }
 }
 JSON
@@ -170,8 +171,8 @@ resource "aws_ecs_task_definition" "k6" {
   family                   = "K6Task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "16384"
-  memory                   = "65536"
+  cpu                      = "4096"
+  memory                   = "16384"
   execution_role_arn       = aws_iam_role.execution.arn
   task_role_arn            = aws_iam_role.task.arn
 
