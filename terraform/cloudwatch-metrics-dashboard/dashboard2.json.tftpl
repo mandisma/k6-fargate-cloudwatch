@@ -1,0 +1,169 @@
+{
+    "widgets": [
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 7,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "k6", "k6_vus", "metric_type", "gauge", { "label": "Virtual Users (VUs)", "region": "eu-west-1" } ],
+                    [ ".", "k6_http_reqs", ".", "counter", { "label": "HTTP Requests (reqs/s)", "yAxis": "right", "region": "eu-west-1" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "eu-west-1",
+                "title": "Virtual Users & HTTP Requests",
+                "stat": "Average",
+                "period": 1,
+                "yAxis": {
+                    "left": {
+                        "label": "Virtual Users",
+                        "showUnits": false
+                    },
+                    "right": {
+                        "label": "Requests",
+                        "showUnits": false
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 7,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "k6", "k6_data_received", "metric_type", "counter", { "label": "Data Received" } ],
+                    [ "k6", "k6_data_sent", "metric_type", "counter", { "label": "Data Sent", "yAxis": "right" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "Transfer Rate",
+                "region": "eu-west-1",
+                "stat": "Sum",
+                "period": 1,
+                "yAxis": {
+                    "left": {
+                        "label": "Bytes Received",
+                        "showUnits": false
+                    },
+                    "right": {
+                        "label": "Bytes Sent",
+                        "showUnits": false
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 24,
+            "height": 7,
+            "properties": {
+                "metrics": [
+                    [ "k6", "k6_http_reqs", "metric_type", "counter", { "label": "Request Rate (reqs/sec)", "region": "eu-west-1" } ],
+                    [ ".", "k6_http_req_duration", ".", "timing", { "stat": "p95", "label": "Request Duration p95", "region": "eu-west-1", "yAxis": "right" } ],
+                    [ ".", "k6_http_req_failed", ".", "counter", { "label": "Request Failed (count)", "region": "eu-west-1" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "eu-west-1",
+                "title": "HTTP Performance Overview",
+                "stat": "Average",
+                "period": 1,
+                "yAxis": {
+                    "left": {
+                        "label": "Count",
+                        "showUnits": false
+                    },
+                    "right": {
+                        "label": "Duration (ms)",
+                        "showUnits": false
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 13,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "k6", "k6_http_req_duration", "metric_type", "timing", { "label": "Average Duration", "stat": "Average" } ],
+                    [ ".", ".", ".", ".", { "label": "p90 Duration", "stat": "p90" } ],
+                    [ ".", ".", ".", ".", { "label": "p95 Duration", "stat": "p95" } ],
+                    [ ".", ".", ".", ".", { "label": "p99 Duration", "stat": "p99" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "eu-west-1",
+                "title": "HTTP Request Duration",
+                "period": 1,
+                "yAxis": {
+                    "left": {
+                        "label": "Duration (ms)",
+                        "showUnits": false
+                    }
+                },
+                "legend": {
+                    "position": "right"
+                },
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "Performance Threshold",
+                            "value": 500,
+                            "fill": "below",
+                            "color": "#2ca02c"
+                        },
+                        {
+                            "label": "Warning Threshold",
+                            "value": 1000,
+                            "fill": "between",
+                            "color": "#ffbb78"
+                        },
+                        {
+                            "label": "Critical Threshold",
+                            "value": 2000,
+                            "fill": "above",
+                            "color": "#d62728"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 13,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "k6", "k6_iteration_duration", "metric_type", "timing", { "label": "Average Iteration", "stat": "Average" } ],
+                    [ ".", ".", ".", ".", { "label": "p90 Iteration", "stat": "p90" } ],
+                    [ ".", ".", ".", ".", { "label": "p95 Iteration", "stat": "p95" } ],
+                    [ ".", ".", ".", ".", { "label": "p99 Iteration", "stat": "p99" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "eu-west-1",
+                "title": "Iteration Duration",
+                "period": 1,
+                "yAxis": {
+                    "left": {
+                        "label": "Duration (ms)",
+                        "showUnits": false
+                    }
+                }
+            }
+        }
+    ]
+}
